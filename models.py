@@ -8,3 +8,6 @@ class Student(Base):
     name = Column(String(255), nullable=False)
     age = Column(Integer, nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
+
+
+    # This is my first project
