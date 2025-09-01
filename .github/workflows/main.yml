@@ -1,0 +1,40 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docker-compose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install docker-compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Start services with docker-compose
+        run: |
+          docker-compose up -d --build
+
+      - name: Wait for FastAPI to be ready
+        run: |
+          echo "Waiting for FastAPI to start..."
+          sleep 10
+          curl -f http://localhost:8000/ || echo "FastAPI not ready yet"
+
+      - name: List running containers
+        run: docker ps
+
+      - name: Stop services
+        run: docker-compose down
