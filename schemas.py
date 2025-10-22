@@ -1,14 +1,20 @@
-from pydantic import BaseModel, EmailStr
+# schemas.py
+# Isse API data ko validate karte h
 
-class StudentBase(BaseModel):
+from pydantic import BaseModel
+
+class ItemBase(BaseModel):
     name: str
-    age: int
-    email: EmailStr
+    product: str
+    phone: str | None = None
+    email: str | None = None
+    quantity: int
+    description: str | None = None
 
-class StudentCreate(StudentBase):
+class ItemCreate(ItemBase):
     pass
 
-class Student(StudentBase):
+class Item(ItemBase):
     id: int
     class Config:
-        from_attributes = True   # Pydantic v2
+        orm_mode = True

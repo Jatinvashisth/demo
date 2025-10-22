@@ -1,18 +1,20 @@
+# database.py
+# Isse MySQL connect karte h
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+# MySQL credentials
+DB_USER = "root"
+DB_PASSWORD = "root"
+DB_HOST = "localhost"
+DB_NAME = "data"
 
-DATABASE_URL = "mysql+pymysql://root:root@mysql_db:3306/college"
+# Database URL
+DATABASE_URL = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
-engine = create_engine(DATABASE_URL)  # MySQL compatible
+# Create engine and session
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
